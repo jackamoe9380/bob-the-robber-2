@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bob the Robber 2</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Gill Sans", sans-serif;
+            background-color: #274e13;
+        }
+        .game-embed-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #274e13;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+            color: #fff;
+            text-align: center;
+        }
+        #container {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+    <!-- Include Ruffle for Flash emulation -->
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+</head>
+<body>
+    <div id="gameContainer" class="game-embed-container">
+        <div id="container"></div>
+    </div>
+
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.RufflePlayer.config = {
+            "autoplay": "on",
+            "polyfills": true,
+            "letterbox": "on",
+            "backgroundColor": null,
+            "scale": "showAll",
+            "allowFullscreen": true,
+            "forceScale": true,
+            "forceAlign": true,
+            "splashScreen": true,
+            "wmode": "Window",
+            "unmuteOverlay": "hidden",
+            "quality": "high"
+        };
+
+        window.addEventListener("load", async () => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            const container = document.getElementById("container");
+            container.appendChild(player);
+            
+            player.style.width = "100%";
+            player.style.height = "100%";
+
+            // Point this to your local file name
+            const localFileUrl = "bob-the-robber-2.waf"; 
+
+            try {
+                const response = await fetch(localFileUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                const blob = new Blob([arrayBuffer], { type: "application/x-shockwave-flash" });
+                const blobUrl = URL.createObjectURL(blob);
+                
+                player.load(blobUrl);
+            } catch (err) {
+                console.error("Failed to load local game file:", err);
+            }
+        });
+    </script>
+</body>
+</html>
